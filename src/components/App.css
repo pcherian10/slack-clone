@@ -5,3 +5,8 @@ body,
     background: #eee;
     padding: 1em;
 }
+
+#form-element {
+    display: 'block';
+    margin: '10px';
+}
