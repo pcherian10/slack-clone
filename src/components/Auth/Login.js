@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Grid, Form, Segment, Button, Header, Message, Icon } from 'semantic-ui-react'
 import { Link } from 'react-router-dom'
 import '../App.css'
-
-
+import firebase from '../../firebase'
 
 class Login extends Component {
 
@@ -21,12 +20,25 @@ class Login extends Component {
     handleSubmit = (event) => {
         event.preventDefault();
 
-        if(this.isFormValid()) {
-            this.setState({ errors: [], loading: true })
-            
+        if(this.isFormValid(this.state)) {
+           this.setState({ errors: [], loading: true })   
+           firebase
+            .auth()
+            .signInWithEmailAndPassword(this.state.email, this.state.password)
+            .then(signedInUser => {
+                console.log(signedInUser)
+            })
+            .catch(err => {
+                console.error(err);
+                this.setState({
+                    errors: this.state.errors.concat(err),
+                    loading: false
+                });
+            });
         }
     };  
 
+    isFormValid = ({ email, password }) => email && password;
 
     displayErrors = errors => errors.map((error, i) =>  <p key={i}>{error.message}</p>);
 
