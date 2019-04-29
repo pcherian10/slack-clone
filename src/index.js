@@ -9,14 +9,12 @@ import Spinner from './Spinner';
 import 'semantic-ui-css/semantic.min.css'
 import firebase from './firebase'
 
-
-
 import { BrowserRouter as Router, Switch, Route, withRouter } from 'react-router-dom';
 import { createStore } from 'redux'
 import { Provider, connect } from 'react-redux'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import rootReducer from './reducers'
-import { setUser } from './actions/index'
+import { setUser, clearUser} from './actions/index'
 
 const store = createStore(rootReducer, composeWithDevTools());
 
@@ -28,6 +26,9 @@ class Root extends Component {
             if (user) {
                 this.props.setUser(user)
                 this.props.history.push('/')
+            } else {
+                this.props.history.push('/login');
+                this.props.clearUser();
             }
         })
     }
@@ -50,7 +51,7 @@ const mapStateToProps = state => ({
 const RootWithAuth = withRouter(
     connect(
         mapStateToProps, 
-        { setUser }
+        { setUser, clearUser }
         )(Root));
 
 
