@@ -7,7 +7,7 @@ import firebase from '../../firebase'
 class MessagesForm extends React.Component {
     state = {
         user: this.props.currentUser,
-        message: " ",
+        message: "",
         percentUploaded: 0,
         channel: this.props.currentChannel,
         loading: false,
@@ -35,15 +35,13 @@ class MessagesForm extends React.Component {
                 name: this.state.user.displayName,
                 avatar: this.state.user.photoURL
             },
-            content: this.state.message
-        }
-        console.log(fileUrl)
-        if ( fileUrl !== null ) {
-            console.log(fileUrl)
-            message['image'] = fileUrl;
-        } else {
-            message['content'] = this.state.message
-        }
+                content: this.state.message,
+            }
+            if ( fileUrl !== null ) {
+                message['image'] = fileUrl;
+            } else {
+                message['content'] = this.state.message
+            }
         return message
     }
 
@@ -99,7 +97,6 @@ class MessagesForm extends React.Component {
                 },
                 () => {
                     this.state.uploadTask.snapshot.ref.getDownloadURL().then(downloadUrl => {
-                        console.log(downloadUrl)
                         this.sendFileMessage(downloadUrl, ref, pathToUpload)
                     })
                     .catch(err => {
@@ -136,14 +133,12 @@ class MessagesForm extends React.Component {
     render() {
         const { errors, message, loading, modal } = this.state
 
-        console.log(this.state.uploadState)
-
         return (
             <Segment className="message__form">
                 <Input
                   fluid
                   name="message"
-                  style={{ marginBottom: '07em' }}
+                  style={{ marginBottom: '0.7em' }}
                   label={<Button icon={'add'} />}
                   labelPosition="left"
                   value={message}
@@ -169,9 +164,9 @@ class MessagesForm extends React.Component {
                       labelPosition="right"
                       icon="cloud upload"
                     />
-                    <FileModal modal={modal}  closeModal={this.closeModal} uploadFile={this.uploadFile} />
                 </Button.Group>
-            
+                <FileModal modal={modal}  closeModal={this.closeModal} uploadFile={this.uploadFile} />
+                <ProgressBar />
             </Segment>
 
         )
