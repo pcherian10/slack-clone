@@ -35,14 +35,14 @@ class MessagesForm extends React.Component {
                 id: this.state.user.uid,
                 name: this.state.user.displayName,
                 avatar: this.state.user.photoURL
-            },
-                content: this.state.message,
             }
-            if ( fileUrl !== null ) {
-                message['image'] = fileUrl;
-            } else {
-                message['content'] = this.state.message
-            }
+        }
+
+        if ( fileUrl !== null ) {
+            message['image'] = fileUrl;
+        } else {
+            message['content'] = this.state.message
+        }
         return message
     }
 
@@ -86,6 +86,7 @@ class MessagesForm extends React.Component {
         () => {
             this.state.uploadTask.on('state_changed', snap=> {
                 const percentUploaded = Math.round(( snap.bytesTransferred / snap.totalBytes ) * 100)
+                this.props.isProgressBarVisible(percentUploaded)
                 this.setState({ percentUploaded });
             },
                 err => {
@@ -161,6 +162,7 @@ class MessagesForm extends React.Component {
                     <Button
                       onClick={this.openModal}
                       color="teal"
+                      disabled={uploadState === "uploading"}
                       content="Upload Media"
                       labelPosition="right"
                       icon="cloud upload"
